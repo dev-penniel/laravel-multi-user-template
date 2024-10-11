@@ -16,19 +16,24 @@ class SuperAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-
-        // If User is not logged in
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
+        
         //Check if user is not super admin
         $userRole = Auth::user()->role;
 
-        if($userRole !== 1){
-            abort(Response::HTTP_FORBIDDEN);
+        if($userRole == 1){
+
+            return $next($request);
+
+        }elseif($userRole == 2){
+
+            return redirect()->route('admin.dashboard');
+
+        }elseif($userRole == 3){
+
+            return redirect()->route('dashboard');
+
         }
 
-        return $next($request);
+        
     }
 }
