@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\PasswordChangeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,6 +23,14 @@ Route::get('/admin/dashboard', function () {
 Route::get('/super-admin/dashboard', function () {
     return view('super-admin.dashboard');
 })->middleware(['auth', 'verified', 'super-admin'])->name('super-admin.dashboard');
+
+// Users routes
+Route::resource('users', UserController::class)
+    ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
+    ->middleware(['auth', 'verified', 'super-admin']);
+
+// Super admin updates user password
+Route::patch('/users/{user}/update-password', [PasswordChangeController::class, 'update'])->name('users.update-password');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
