@@ -30,7 +30,19 @@ Route::resource('users', UserController::class)
     ->middleware(['auth', 'verified', 'super-admin']);
 
 // Super admin updates user password
-Route::patch('/users/{user}/update-password', [PasswordChangeController::class, 'update'])->name('users.update-password');
+Route::patch('/users/{user}/update-password', [PasswordChangeController::class, 'update'])
+    ->middleware(['auth', 'verified', 'super-admin'])
+    ->name('users.update-password');
+
+// Suspend User
+Route::patch('/users/{user}/suspend', [UserController::class, 'suspend'])
+    ->middleware(['auth', 'verified', 'super-admin'])
+    ->name('users.suspend');
+
+// Unsusspend User
+Route::patch('/users/{user}/unsuspend', [UserController::class, 'unsuspend'])
+    ->middleware(['auth', 'verified', 'super-admin'])
+    ->name('users.unsuspend');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

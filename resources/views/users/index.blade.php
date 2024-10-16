@@ -79,8 +79,9 @@
                                 <td class="px-5">Name</td>
                                 <td class="px-5">Email</td>
                                 <td class="px-5">Role</td>
+                                <td class="px-5">Status</td>
                                 <td class="px-5">Created At</td>
-                                <td class="px-5">Updated At</td>
+                                {{-- <td class="px-5">Updated At</td> --}}
                                 <td class="px-5">Action</td>
                             </tr>
                         </thead>
@@ -98,14 +99,25 @@
                                             $userRole = 'User';
 
                                         }
+
+                                        if($user->status == 0){
+
+                                            $userStatus = 'Access';
+
+                                        }elseif ($user->status == 1) {
+                                            
+                                            $userStatus = 'Suspended';
+
+                                        }
                                     @endphp
 
                                     <tr>
                                         <td class="px-5">{{ $user->name }}</td>
                                         <td class="px-5">{{ $user->email }}</td>
                                         <td class="px-5">{{ $userRole }}</td>
+                                        <td class="px-5">{{ $userStatus }}</td>
                                         <td class="px-5">{{ $user->created_at->format('l, F j, Y') }}</td>
-                                        <td class="px-5">{{ $user->updated_at->format('l, F j, Y') }}</td>
+                                        {{-- <td class="px-5">{{ $user->updated_at->format('l, F j, Y') }}</td> --}}
                                         <td class="px-5"><a href="{{route("users.edit", $user)}}">{{ __('Edit') }}</a></td>
                                     </tr>
                                 @endforeach

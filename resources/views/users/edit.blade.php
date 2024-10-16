@@ -101,6 +101,132 @@
                 </div>
             </div>
 
+            @if ($user->status == 0)
+                <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                    <div class="max-w-xl">
+                        <section class="space-y-6">
+                            <header>
+                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                    {{ __('Suspend Account') }}
+                                </h2>
+                        
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                    {{ __("Once ".$user->name."'s account is deleted, all of its resources and data will be permanently deleted. Before deleting this account, please download any data or information that you wish to retain.") }}
+                                </p>
+                            </header>
+                        
+                            <x-danger-button
+                                x-data=""
+                                x-on:click.prevent="$dispatch('open-modal', 'suspend-user')"
+                            >{{ __('Suspend Account') }}</x-danger-button>
+                        
+                            <x-modal name="suspend-user" :show="$errors->userDeletion->isNotEmpty()" focusable>
+                                <form method="post" action="{{ route('users.suspend', $user) }}" class="p-6">
+                                    @csrf
+                                    @method('patch')
+                        
+                                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                        {{ __("Are you sure you want to delete ".$user->name." your account?") }}
+                                    </h2>
+                        
+                                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                        {{ __("Once ".$user->name."'s account is deleted, all of its resources and data will be permanently deleted. Please enter Super Admin password to confirm you would like to permanently delete this user's account.") }}
+                                    </p>
+                        
+                                    <div class="mt-6">
+                                        <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
+                        
+                                        <x-text-input
+                                            id="password"
+                                            name="password"
+                                            type="password"
+                                            class="mt-1 block w-3/4"
+                                            placeholder="{{ __('Password') }}"
+                                        />
+                        
+                                        <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                                    </div>
+                        
+                                    <div class="mt-6 flex justify-end">
+                                        <x-secondary-button x-on:click="$dispatch('close')">
+                                            {{ __('Cancel') }}
+                                        </x-secondary-button>
+                        
+                                        <x-danger-button class="ms-3">
+                                            {{ __('Suspend Account') }}
+                                        </x-danger-button>
+                                    </div>
+                                </form>
+                            </x-modal>
+                        </section>
+                        
+                    </div>
+                </div>
+            @else
+                <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                    <div class="max-w-xl">
+                        <section class="space-y-6">
+                            <header>
+                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                    {{ __('Unsuspend Account') }}
+                                </h2>
+                        
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                    {{ __($user->name."'s account is suspended, all of its resources and data will be permanently deleted. Before deleting this account, please download any data or information that you wish to retain.") }}
+                                </p>
+                            </header>
+                        
+                            <x-danger-button
+                                x-data=""
+                                x-on:click.prevent="$dispatch('open-modal', 'unsuspend-user')"
+                            >{{ __('Unsuspend Account') }}</x-danger-button>
+                        
+                            <x-modal name="unsuspend-user" :show="$errors->userDeletion->isNotEmpty()" focusable>
+                                <form method="post" action="{{ route('users.unsuspend', $user) }}" class="p-6">
+                                    @csrf
+                                    @method('patch')
+                        
+                                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                        {{ __("Are you sure you want to unsuspend ".$user->name." 's account?") }}
+                                    </h2>
+                        
+                                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                        {{ __("Once ".$user->name."'s account is deleted, all of its resources and data will be permanently deleted. Please enter Super Admin password to confirm you would like to permanently delete this user's account.") }}
+                                    </p>
+                        
+                                    <div class="mt-6">
+                                        <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
+                        
+                                        <x-text-input
+                                            id="password"
+                                            name="password"
+                                            type="password"
+                                            class="mt-1 block w-3/4"
+                                            placeholder="{{ __('Password') }}"
+                                        />
+                        
+                                        <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                                    </div>
+                        
+                                    <div class="mt-6 flex justify-end">
+                                        <x-secondary-button x-on:click="$dispatch('close')">
+                                            {{ __('Cancel') }}
+                                        </x-secondary-button>
+                        
+                                        <x-danger-button class="ms-3">
+                                            {{ __('Unsuspend Account') }}
+                                        </x-danger-button>
+                                    </div>
+                                </form>
+                            </x-modal>
+                        </section>
+                        
+                    </div>
+                </div>
+            @endif
+
+            
+
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">
                     <section class="space-y-6">

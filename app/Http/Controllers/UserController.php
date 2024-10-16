@@ -10,6 +10,7 @@ use Illuminate\View\View;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
@@ -69,6 +70,32 @@ class UserController extends Controller
         $user->update($validated);
 
         return redirect(route('users.edit', $user))->with('status', 'user-updated');
+    }
+
+    // Suspend User
+    public function suspend(Request $request, User $user): RedirectResponse
+    {
+        $request->validateWithBag('suspend', [
+            'password' => ['required', 'current_password'],
+        ]);
+
+
+        $user->update(['status' => 1]);
+
+        return back()->with('status', 'User Suspended');
+
+    }
+
+    // Unsuspend User
+    public function unsuspend(Request $request, user $user): RedirectResponse
+    {
+        $request->validateWithBag('unsuspend', [
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $user->update(['status' => 0]);
+
+        return back()->with('status', 'Users Unsupended');
     }
 
 

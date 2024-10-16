@@ -24,6 +24,32 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+
+        // Check if user account is suspended
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        // Attempt to authenticate user
+        if(Auth::attempt($request->only('email', 'password'))){
+            
+            $user = Auth::user();
+
+            // Check if user is suspended
+            if($user->status == 1){
+
+                // Log out user immediately
+                Auth::logout();
+
+                // Redirect to login with custom suspension message
+                return redirect()->route('login')->withErrors([
+                    'email' => 'Your account is suspended, contact admin',
+                ]);
+
+            }
+        }
+
         $request->authenticate();
 
         $request->session()->regenerate();
